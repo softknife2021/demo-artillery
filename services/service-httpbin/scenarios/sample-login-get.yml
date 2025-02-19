@@ -1,0 +1,32 @@
+before:
+  flow:
+    - log: "Test login"
+    - post:
+        url: "/post"
+        json:
+          username: "{{ admin_username }}"
+          password: "{{ admin_password }}"
+        afterResponse: logHttpStatus
+        capture:
+          - json: "$.headers.Host"
+            as: "token"
+        expect:
+          - statusCode: 200
+
+scenarios:
+  - name: "Test Get call"
+    flow:
+      - log: "Get entities for user"
+      - get:
+          url: "/get"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          afterResponse: logHttpStatus
+          capture:
+            - json: "$.headers.Host"
+              as: "typename"
+          expect:
+            - statusCode: 200
+            - equals:
+                - "{{ typename }}"
+                - "httpbin.org"

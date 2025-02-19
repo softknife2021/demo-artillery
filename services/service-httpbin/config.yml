@@ -1,0 +1,27 @@
+---
+config:
+  extendedMetrics: true
+  plugins:
+    ensure: {}
+    metrics-by-endpoint: {}
+    expect: {}
+  processor: ../../scripts/helper-functions.js
+  environments:
+    int:
+      target: https://httpbin.org
+      http:
+        timeout: 600
+      phases:
+        - name: Warm Up
+          duration: 10
+          arrivalRate: 2
+          rampTo: 7
+      variables:
+        admin_username: "{{ $processEnvironment.ADMIN_USERNAME }}"
+        admin_password: "{{ $processEnvironment.ADMIN_PASSWORD }}"
+  ensure:
+    thresholds:
+      - http.response_time.p99: 10000
+      - http.response_time.p95: 10000
+      - http.response_time.max: 20000
+    maxErrorRate: 2
