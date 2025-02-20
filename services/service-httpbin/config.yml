@@ -21,7 +21,7 @@ config:
         admin_password: "{{ $processEnvironment.ADMIN_PASSWORD }}"
   ensure:
     thresholds:
-      - http.response_time.p99: {{ $processEnvironment.RESP_TIMENN }}
+      - http.response_time.p99: 1000
       - http.response_time.p95: 1000
       - http.response_time.max: 2000
     maxErrorRate: 2
