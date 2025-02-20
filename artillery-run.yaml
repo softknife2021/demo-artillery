@@ -1,0 +1,30 @@
+kind: TestWorkflow
+apiVersion: testworkflows.testkube.io/v1
+metadata:
+  name: artillery-sample-from-template
+  namespace: testkube
+  labels:
+    docs: example
+spec:
+  container:
+    workingDir: /data/repo/services/service
+  steps:
+  - name: Run from template
+    content:
+      git:
+        uri: https://github.com/softknife2021/demo-artillery
+        revision: main
+        username: softknife2021
+        tokenFrom:
+          secretKeyRef:
+            name: testkube-tw-demo-artillery-j71nzf
+            key: git-token
+        paths:
+        - services/service/httpbin/scenarios/sample-login.yml
+    workingDir: /data/repo/services
+    template:
+      name: official/artillery/v1
+      config:
+        run: artillery run run -e int --output ../reports/report.json --config service-httpbin/config.yml service-httpbin/scenarios/sample-login-get.yml
+        version: 2.0.9
+status: {}

@@ -5,7 +5,7 @@ config:
     ensure: {}
     metrics-by-endpoint: {}
     expect: {}
-  processor: ../../scripts/helper-functions.js
+  processor: ../scripts/helper-functions.js
   environments:
     int:
       target: https://httpbin.org
@@ -13,15 +13,15 @@ config:
         timeout: 600
       phases:
         - name: Warm Up
-          duration: 10
-          arrivalRate: 2
-          rampTo: 7
+          duration: 2
+          arrivalRate: 1
+          rampTo: 2
       variables:
         admin_username: "{{ $processEnvironment.ADMIN_USERNAME }}"
         admin_password: "{{ $processEnvironment.ADMIN_PASSWORD }}"
   ensure:
     thresholds:
-      - http.response_time.p99: 10000
-      - http.response_time.p95: 10000
-      - http.response_time.max: 20000
+      - http.response_time.p99: {{ $processEnvironment.RESPONSE_TIME_P99 }}
+      - http.response_time.p95: 1000
+      - http.response_time.max: 2000
     maxErrorRate: 2
