@@ -5,6 +5,7 @@ config:
     ensure: {}
     metrics-by-endpoint: {}
     expect: {}
+    apdex: {}
   processor: ../scripts/helper-functions.js
   environments:
     int:
@@ -19,6 +20,8 @@ config:
       variables:
         admin_username: "{{ $processEnvironment.ADMIN_USERNAME }}"
         admin_password: "{{ $processEnvironment.ADMIN_PASSWORD }}"
+  apdex:
+    threshold: 100
   ensure:
     thresholds:
       - http.response_time.p99: 500
