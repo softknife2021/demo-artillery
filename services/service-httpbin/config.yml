@@ -24,7 +24,7 @@ config:
     threshold: 100
   ensure:
     thresholds:
-      - http.response_time.p99: 500
+      - http.response_time.p99: "{{$env.RESP_TIMENN}}"
       - http.response_time.p95: 1000
       - http.response_time.max: 2000
     maxErrorRate: 2
